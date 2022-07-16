@@ -6,7 +6,7 @@ import {
 import * as E from 'fp-ts/Either';
 import { Either, isLeft, left, right } from 'fp-ts/Either';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
-import { invariants } from '../../utils/invariants';
+import { invariants } from '../../utils/validation/invariants';
 
 enum WeightUnitEnum {
   kg = 'kg',
