@@ -10,6 +10,7 @@ export class Size {
   readonly width: Width;
 
   constructor(
+    // TODO: accept objects which have the same structure as dto this parameter arrays are not very usable
     heightParams: ConstructorParameters<typeof Height>,
     widthParams: ConstructorParameters<typeof Width>,
   ) {
