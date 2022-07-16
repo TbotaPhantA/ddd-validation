@@ -3,6 +3,7 @@ import {
   UNKNOWN_WEIGHT_UNIT,
   WEIGHT_CANNOT_BE_NEGATIVE,
 } from '../../../../../../src/complicatedExample/domain/shared/errors/error-messages';
+import { WeightUnitEnum } from '../../../../../../src/complicatedExample/domain/shared/value-objects/weight/enums/weight-unit.enum';
 
 describe('Weight', () => {
   describe('constructor', () => {
@@ -10,7 +11,7 @@ describe('Weight', () => {
       {
         toString: () => '50 kilograms - should create without error',
         weight: 50,
-        unit: 'kg',
+        unit: WeightUnitEnum.KG,
       },
     ];
 
@@ -30,7 +31,7 @@ describe('Weight', () => {
       {
         toString: () => '-1 kilograms - should throw and error',
         weight: -1,
-        unit: 'kg',
+        unit: WeightUnitEnum.KG,
         errorMessage: WEIGHT_CANNOT_BE_NEGATIVE,
       },
     ];

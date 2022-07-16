@@ -17,7 +17,7 @@ export class Weight {
       throw new DomainError(canCreate.left.join('; '));
     }
 
-    if (unit === 'kg') {
+    if (unit === WeightUnitEnum.KG) {
       this.weightInKilograms = weight;
     } else {
       throw new DomainError(UNKNOWN_WEIGHT_UNIT(unit));
