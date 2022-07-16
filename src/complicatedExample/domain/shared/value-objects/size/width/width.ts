@@ -4,8 +4,4 @@ export class Width {
   constructor(widthInCentimeters: number) {
     this.widthInCentimeters = widthInCentimeters;
   }
-
-  get centimeters() {
-    return this.widthInCentimeters;
-  }
 }
