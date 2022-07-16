@@ -4,7 +4,7 @@ import { WIDTH_CANNOT_BE_NEGATIVE } from './error-messages';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
 import { Either, isLeft } from 'fp-ts/Either';
 import { invariants } from '../../../utils/validation/invariants';
-import { widthIsNotNegative } from './invariants';
+import { widthIsNotNegative, widthUnitExists } from './invariants';
 
 export class Width {
   private readonly widthInCentimeters: number;
@@ -27,6 +27,6 @@ export class Width {
     width: number,
     unit: WidthUnitEnum,
   ): Either<NonEmptyArray<string>, undefined> {
-    return invariants(widthIsNotNegative(width));
+    return invariants(widthIsNotNegative(width), widthUnitExists(unit));
   }
 }
