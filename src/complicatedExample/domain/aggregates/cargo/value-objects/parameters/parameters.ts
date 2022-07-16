@@ -1,16 +1,16 @@
-import { RequiredTemperature } from './required-temperature';
+import { RequiredTemperature } from './required-temperature/required-temperature';
 import { Weight } from '../../../../shared';
 
 export class Parameters {
-  isFragile: boolean;
+  readonly isFragile: boolean;
 
-  isExplosive: boolean;
+  readonly isExplosive: boolean;
 
-  requiredTemperature: RequiredTemperature;
+  readonly requiredTemperature: RequiredTemperature;
 
-  isWaterproof: boolean;
+  readonly isWaterproof: boolean;
 
-  isEvaporative: boolean;
+  readonly isEvaporative: boolean;
 
-  weight: Weight;
+  readonly weight: Weight;
 }

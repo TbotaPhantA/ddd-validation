@@ -1,4 +1,4 @@
-import { Temperature } from '../../../../shared';
+import { Temperature } from '../../../../../shared';
 
 export class RequiredTemperature {
   readonly minTemperature: Temperature;

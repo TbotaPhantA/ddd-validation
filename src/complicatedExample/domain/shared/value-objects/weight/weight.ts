@@ -1,12 +1,12 @@
-import { DomainError } from '../errors/domainError';
+import { DomainError } from '../../errors/domainError';
 import {
   UNKNOWN_WEIGHT_UNIT,
   WEIGHT_CANNOT_BE_NEGATIVE,
-} from '../errors/error-messages';
+} from '../../errors/error-messages';
 import * as E from 'fp-ts/Either';
 import { Either, isLeft, left, right } from 'fp-ts/Either';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
-import { invariants } from '../utils/invariants';
+import { invariants } from '../../utils/invariants';
 
 enum WeightUnitEnum {
   kg = 'kg',
@@ -34,10 +34,6 @@ export class Weight {
     unit: WeightUnitEnum,
   ): E.Either<NonEmptyArray<string>, undefined> {
     return invariants(weightIsNotNegative(weight), weightUnitExists(unit));
-  }
-
-  get kilograms() {
-    return this.weightInKilograms;
   }
 }
 
