@@ -1,16 +1,11 @@
 import { DomainError } from '../../errors/domainError';
-import {
-  UNKNOWN_WEIGHT_UNIT,
-  WEIGHT_CANNOT_BE_NEGATIVE,
-} from '../../errors/error-messages';
+import { UNKNOWN_WEIGHT_UNIT } from '../../errors/error-messages';
 import * as E from 'fp-ts/Either';
-import { Either, isLeft, left, right } from 'fp-ts/Either';
+import { isLeft } from 'fp-ts/Either';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
 import { invariants } from '../../utils/validation/invariants';
-
-enum WeightUnitEnum {
-  kg = 'kg',
-}
+import { weightIsNotNegative, weightUnitExists } from './invariants';
+import { WeightUnitEnum } from './enums/weight-unit.enum';
 
 export class Weight {
   private readonly weightInKilograms: number;
@@ -36,15 +31,3 @@ export class Weight {
     return invariants(weightIsNotNegative(weight), weightUnitExists(unit));
   }
 }
-
-const weightIsNotNegative = (
-  weight: number,
-): Either<NonEmptyArray<string>, number> =>
-  weight >= 0 ? right(weight) : left([WEIGHT_CANNOT_BE_NEGATIVE]);
-
-const weightUnitExists = (
-  unit: WeightUnitEnum,
-): Either<NonEmptyArray<string>, WeightUnitEnum> =>
-  Object.values(WeightUnitEnum).includes(unit)
-    ? right(unit)
-    : left([UNKNOWN_WEIGHT_UNIT(unit)]);
