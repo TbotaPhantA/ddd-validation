@@ -4,8 +4,4 @@ export class Temperature {
   constructor(temperatureCelsius: number) {
     this.temperatureInCelsius = temperatureCelsius;
   }
-
-  get celsius() {
-    return this.temperatureInCelsius;
-  }
 }
