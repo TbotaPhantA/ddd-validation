@@ -1,3 +1,3 @@
 export * from './size';
-export * from './height';
+export * from './height/height';
 export * from '../weight/weight';

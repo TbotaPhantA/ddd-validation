@@ -1,5 +1,5 @@
-import { Height } from './height';
-import { Width } from './width';
+import { Height } from './height/height';
+import { Width } from './width/width';
 
 export class Size {
   readonly height: Height;
