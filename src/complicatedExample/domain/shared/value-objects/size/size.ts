@@ -1,13 +1,35 @@
 import { Height } from './height/height';
 import { Width } from './width/width';
+import { invariants } from '../../utils/validation/invariants';
+import { isLeft } from 'fp-ts/Either';
+import { DomainError } from '../../errors/domainError';
 
 export class Size {
   readonly height: Height;
 
   readonly width: Width;
 
-  constructor(height: Height, width: Width) {
-    this.height = height;
-    this.width = width;
+  constructor(
+    heightParams: ConstructorParameters<typeof Height>,
+    widthParams: ConstructorParameters<typeof Width>,
+  ) {
+    const canCreate = Size.canCreate(heightParams, widthParams);
+
+    if (isLeft(canCreate)) {
+      throw new DomainError(canCreate.left.join(';\n'));
+    }
+
+    this.height = new Height(...heightParams);
+    this.width = new Width(...widthParams);
+  }
+
+  public static canCreate(
+    heightParams: ConstructorParameters<typeof Height>,
+    widthParams: ConstructorParameters<typeof Width>,
+  ) {
+    return invariants(
+      Height.canCreate(...heightParams),
+      Width.canCreate(...widthParams),
+    );
   }
 }

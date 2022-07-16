@@ -7,7 +7,7 @@ import { invariants } from '../../../utils/validation/invariants';
 import { widthIsNotNegative, widthUnitExists } from './invariants';
 
 export class Width {
-  private readonly widthInCentimeters: number;
+  readonly widthInCentimeters: number;
 
   constructor(width: number, unit: WidthUnitEnum) {
     const canCreate = Width.canCreate(width, unit);
