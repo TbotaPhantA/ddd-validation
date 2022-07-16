@@ -2,7 +2,7 @@ import { Weight } from '../../../../../../src/complicatedExample/domain/shared';
 import {
   UNKNOWN_WEIGHT_UNIT,
   WEIGHT_CANNOT_BE_NEGATIVE,
-} from '../../../../../../src/complicatedExample/domain/shared/errors/error-messages';
+} from '../../../../../../src/complicatedExample/domain/shared/value-objects/weight/error-messages';
 import { WeightUnitEnum } from '../../../../../../src/complicatedExample/domain/shared/value-objects/weight/enums/weight-unit.enum';
 
 describe('Weight', () => {

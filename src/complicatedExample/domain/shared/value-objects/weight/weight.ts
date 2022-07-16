@@ -1,5 +1,5 @@
 import { DomainError } from '../../errors/domainError';
-import { UNKNOWN_WEIGHT_UNIT } from '../../errors/error-messages';
+import { UNKNOWN_WEIGHT_UNIT } from './error-messages';
 import * as E from 'fp-ts/Either';
 import { isLeft } from 'fp-ts/Either';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';

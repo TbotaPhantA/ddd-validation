@@ -3,7 +3,7 @@ import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
 import {
   UNKNOWN_WEIGHT_UNIT,
   WEIGHT_CANNOT_BE_NEGATIVE,
-} from '../../errors/error-messages';
+} from './error-messages';
 import { WeightUnitEnum } from './enums/weight-unit.enum';
 
 export const weightIsNotNegative = (
