@@ -4,14 +4,18 @@ import {
   WEIGHT_CANNOT_BE_NEGATIVE,
 } from '../errors/error-messages';
 import * as E from 'fp-ts/Either';
-import { isLeft } from 'fp-ts/Either';
+import { Either, isLeft, left, right } from 'fp-ts/Either';
+import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
+import { invariants } from '../utils/invariants';
 
-export type WeightUnit = 'kg';
+enum WeightUnitEnum {
+  kg = 'kg',
+}
 
 export class Weight {
   private readonly weightInKilograms: number;
 
-  constructor(weight: number, unit: WeightUnit) {
+  constructor(weight: number, unit: WeightUnitEnum) {
     const canCreate = Weight.canCreate(weight, unit);
 
     if (isLeft(canCreate)) {
@@ -27,26 +31,24 @@ export class Weight {
 
   public static canCreate(
     weight: number,
-    unit: WeightUnit,
-  ): E.Either<string[], undefined> {
-    const errors: string[] = [];
-
-    if (weight < 0) {
-      errors.push(WEIGHT_CANNOT_BE_NEGATIVE);
-    }
-
-    if (unit !== 'kg') {
-      errors.push(UNKNOWN_WEIGHT_UNIT(unit));
-    }
-
-    if (errors.length > 0) {
-      return E.left(errors);
-    }
-
-    return E.right(undefined);
+    unit: WeightUnitEnum,
+  ): E.Either<NonEmptyArray<string>, undefined> {
+    return invariants(weightIsNotNegative(weight), weightUnitExists(unit));
   }
 
   get kilograms() {
     return this.weightInKilograms;
   }
 }
+
+const weightIsNotNegative = (
+  weight: number,
+): Either<NonEmptyArray<string>, number> =>
+  weight >= 0 ? right(weight) : left([WEIGHT_CANNOT_BE_NEGATIVE]);
+
+const weightUnitExists = (
+  unit: WeightUnitEnum,
+): Either<NonEmptyArray<string>, WeightUnitEnum> =>
+  Object.values(WeightUnitEnum).includes(unit)
+    ? right(unit)
+    : left([UNKNOWN_WEIGHT_UNIT(unit)]);
