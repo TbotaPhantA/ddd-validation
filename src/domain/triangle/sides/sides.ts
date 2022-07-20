@@ -1,10 +1,10 @@
 import { ExtraSideValidation, Side } from '../../shared/value-objects/side';
 import {
   Invariant,
-  invariants,
+  compose,
   isFail,
   result,
-} from '@derbent-ninjas/invariant-composer/src';
+} from '@derbent-ninjas/invariant-composer';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
 
 export interface ExtraSidesValidation {
@@ -43,11 +43,11 @@ export class Sides {
     const sideBInvariant = Side.canCreate(sideB, sideBData).path('sideB');
     const sideCInvariant = Side.canCreate(sideC, sideCData).path('sideC');
 
-    const allSidesInvariant = invariants(
+    const allSidesInvariant = compose(
       everySideDoesntIncreaseLengthOfTwoOtherSides(sideA, sideB, sideC),
     );
 
-    return invariants(
+    return compose(
       sideAInvariant,
       sideBInvariant,
       sideCInvariant,

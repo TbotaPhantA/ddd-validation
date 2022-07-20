@@ -1,8 +1,4 @@
-import {
-  Invariant,
-  success,
-  fail,
-} from '@derbent-ninjas/invariant-composer/src';
+import { Invariant, success, fail } from '@derbent-ninjas/invariant-composer';
 
 export const nameIsUnique = (isNameUnique: boolean): Invariant => {
   return isNameUnique ? success() : fail({ message: 'name must be unique' });
@@ -16,9 +12,9 @@ export const nameLengthIsNotIncreasingMax = (name: string) => {
 };
 
 export const doesntContainSpecialSymbols = (name: string) => {
-  const speciaSymbols = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  const specialSymbols = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
-  if (!name.match(speciaSymbols)) {
+  if (!name.match(specialSymbols)) {
     return success();
   } else {
     return fail({ message: 'name must not contain special symbols' });

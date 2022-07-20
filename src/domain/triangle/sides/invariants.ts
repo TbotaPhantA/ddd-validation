@@ -1,9 +1,5 @@
 import { Side } from '../../shared/value-objects/side';
-import {
-  Invariant,
-  success,
-  fail,
-} from '@derbent-ninjas/invariant-composer/src';
+import { Invariant, success, fail } from '@derbent-ninjas/invariant-composer';
 
 export const everySideDoesntIncreaseLengthOfTwoOtherSides = (
   sideA: Side,

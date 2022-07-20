@@ -1,8 +1,4 @@
-import {
-  invariants,
-  isFail,
-  result,
-} from '@derbent-ninjas/invariant-composer/src';
+import { compose, isFail, result } from '@derbent-ninjas/invariant-composer';
 import {
   doesntContainSpecialSymbols,
   nameIsUnique,
@@ -35,7 +31,7 @@ export class Name {
     { name }: CreateNameParams,
     { isUnique }: ExtraNameValidation,
   ) {
-    return invariants(
+    return compose(
       nameIsUnique(isUnique),
       nameLengthIsNotIncreasingMax(name),
       doesntContainSpecialSymbols(name),

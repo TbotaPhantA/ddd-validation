@@ -1,10 +1,10 @@
 import { ExtraSidesValidation, Sides } from './sides/sides';
 import {
   Invariant,
-  invariants,
+  compose,
   isFail,
   result,
-} from '@derbent-ninjas/invariant-composer/src';
+} from '@derbent-ninjas/invariant-composer';
 import { Name } from './name/name';
 
 export interface ExtraValidationData {
@@ -44,6 +44,6 @@ export class Triangle {
     const sidesInvariant = Sides.canCreate(sides, sidesData).path('sides');
     const nameInvariant = Name.canCreate(name, nameData).path('name');
 
-    return invariants(sidesInvariant, nameInvariant);
+    return compose(sidesInvariant, nameInvariant);
   }
 }

@@ -1,8 +1,4 @@
-import {
-  Invariant,
-  success,
-  fail,
-} from '@derbent-ninjas/invariant-composer/src';
+import { Invariant, success, fail } from '@derbent-ninjas/invariant-composer';
 
 export const lengthIsNotNegative = (length: number): Invariant => {
   return length < 0
