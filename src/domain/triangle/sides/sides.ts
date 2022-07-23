@@ -3,7 +3,8 @@ import {
   Invariant,
   compose,
   isFail,
-  result, path
+  result,
+  path,
 } from '@derbent-ninjas/invariant-composer';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
 
