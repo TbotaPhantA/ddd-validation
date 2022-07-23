@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { TriangleModule } from './application/triangle/triangle.module';
+import { ConfiguredTypeORMModule } from './infrastructure/configuredModules/configuredTypeORMModule';
 
-@Module({})
+@Module({
+  imports: [TriangleModule, ConfiguredTypeORMModule],
+})
 export class AppModule {}
