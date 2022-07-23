@@ -5,7 +5,7 @@ import {
   isFail,
   path,
 } from '@derbent-ninjas/invariant-composer';
-import { Name } from './name/name';
+import { Name } from '../shared/value-objects/name/name';
 import { display } from '../shared/utils/display';
 
 export interface ExtraValidationData {

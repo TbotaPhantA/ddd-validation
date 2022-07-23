@@ -1,13 +1,13 @@
 import {
   ExtraNameValidation,
   Name,
-} from '../../../../src/domain/triangle/name/name';
+} from '../../../../src/domain/shared/value-objects/name/name';
 import { success, fail } from '@derbent-ninjas/invariant-composer';
 import {
   NAME_IS_NOT_UNIQUE,
   NAME_LENGTH_CANNOT_INCREASE_MAX,
   NAME_MUST_NOT_CONTAIN_SPECIAL_SYMBOLS,
-} from '../../../../src/domain/triangle/name/error-messages';
+} from '../../../../src/domain/shared/value-objects/name/error-messages';
 
 describe('Name', () => {
   describe('canCreate', () => {
