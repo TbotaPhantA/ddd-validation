@@ -2,14 +2,9 @@ import {
   ExtraSideValidation,
   Side,
 } from '../../shared/value-objects/side/side';
-import {
-  Invariant,
-  compose,
-  isFail,
-  result,
-  path,
-} from '@derbent-ninjas/invariant-composer';
+import { Invariant, compose, path } from '@derbent-ninjas/invariant-composer';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
+import { assertCanCreate } from '../../shared/errors/assertCanCreate';
 
 export interface ExtraSidesValidation {
   sideAData: ExtraSideValidation;
@@ -28,14 +23,8 @@ export class Sides {
     params: CreateSidesParams,
     extraValidationData: ExtraSidesValidation,
   ) {
-    const canCreate = path(
-      'sides',
-      Sides.canCreate(params, extraValidationData),
-    );
-
-    if (isFail(canCreate)) {
-      throw new Error(JSON.stringify(result(canCreate)));
-    }
+    const canCreate = Sides.canCreate(params, extraValidationData);
+    assertCanCreate('sides', canCreate);
 
     this.sideA = params.sideA;
     this.sideB = params.sideB;
@@ -46,19 +35,19 @@ export class Sides {
     { sideA, sideB, sideC }: CreateSidesParams,
     { sideAData, sideBData, sideCData }: ExtraSidesValidation,
   ): Invariant {
-    const sideAInvariant = path('sideA', Side.canCreate(sideA, sideAData));
-    const sideBInvariant = path('sideB', Side.canCreate(sideB, sideBData));
-    const sideCInvariant = path('sideC', Side.canCreate(sideC, sideCData));
+    const canCreateSideA = path('sideA', Side.canCreate(sideA, sideAData));
+    const canCreateSideB = path('sideB', Side.canCreate(sideB, sideBData));
+    const canCreateSideC = path('sideC', Side.canCreate(sideC, sideCData));
 
-    const allSidesInvariant = compose(
+    const canCreateAllSides = compose(
       everySideDoesntIncreaseLengthOfTwoOtherSides(sideA, sideB, sideC),
     );
 
     return compose(
-      sideAInvariant,
-      sideBInvariant,
-      sideCInvariant,
-      allSidesInvariant,
+      canCreateSideA,
+      canCreateSideB,
+      canCreateSideC,
+      canCreateAllSides,
     );
   }
 }

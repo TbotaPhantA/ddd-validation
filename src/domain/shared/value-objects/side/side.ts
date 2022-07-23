@@ -1,14 +1,10 @@
-import {
-  compose,
-  isFail,
-  path,
-  result,
-} from '@derbent-ninjas/invariant-composer';
+import { compose, path } from '@derbent-ninjas/invariant-composer';
 import {
   lengthIsNotIncreasingMaxValue,
   lengthIsNotNegative,
   sideMustBeUnique,
 } from './invariants';
+import { assertCanCreate } from '../../errors/assertCanCreate';
 
 export interface ExtraSideValidation {
   isUnique: boolean;
@@ -24,10 +20,7 @@ export class Side {
     extraValidationData: ExtraSideValidation,
   ) {
     const canCreate = Side.canCreate(params, extraValidationData);
-
-    if (isFail(canCreate)) {
-      throw new Error(JSON.stringify(result(canCreate)));
-    }
+    assertCanCreate('side', canCreate);
 
     this.length = params.length;
   }
@@ -36,7 +29,7 @@ export class Side {
     { length }: CreateSideParams,
     { isUnique }: ExtraSideValidation,
   ) {
-    const lengthInvariant = path(
+    const canCreateLength = path(
       'length',
       compose(
         lengthIsNotNegative(length),
@@ -44,8 +37,8 @@ export class Side {
       ),
     );
 
-    const sideInvariant = compose(sideMustBeUnique(isUnique));
+    const canCreateSide = compose(sideMustBeUnique(isUnique));
 
-    return compose(lengthInvariant, sideInvariant);
+    return compose(canCreateLength, canCreateSide);
   }
 }

@@ -1,10 +1,11 @@
-import { compose, isFail, result } from '@derbent-ninjas/invariant-composer';
+import { compose } from '@derbent-ninjas/invariant-composer';
 import {
   nameDoesntContainSpecialSymbols,
   nameIsUnique,
   nameLengthIsNotIncreasingMax,
 } from './name-invariants';
 import { Column } from 'typeorm';
+import { assertCanCreate } from '../../errors/assertCanCreate';
 
 export interface ExtraNameValidation {
   isUnique: boolean;
@@ -21,10 +22,7 @@ export class Name {
     extraNameValidation: ExtraNameValidation,
   ) {
     const canCreate = Name.canCreate(createNameParams, extraNameValidation);
-
-    if (isFail(canCreate)) {
-      throw new Error(JSON.stringify(result(canCreate)));
-    }
+    assertCanCreate('name', canCreate);
 
     this.name = createNameParams.name;
   }
