@@ -9,7 +9,7 @@ export class TriangleFactory {
   constructor(private readonly triangleRepository: TriangleRepository) {}
 
   public create(dto: CreateTriangleInputDto): Triangle {
-    // TODO: make real queires to DB
+    // TODO: make real queries to DB
     const isNameUnique = false;
     const isSideAUnique = false;
     const isSideBUnique = false;
