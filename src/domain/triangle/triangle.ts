@@ -7,6 +7,7 @@ import {
 } from '@derbent-ninjas/invariant-composer';
 import { Name } from '../shared/value-objects/name/name';
 import { display } from '../shared/utils/display';
+import { Column, Entity } from 'typeorm';
 
 export interface ExtraValidationData {
   nameData: {
@@ -17,18 +18,19 @@ export interface ExtraValidationData {
 
 type CreateTriangleParams = Pick<Triangle, 'sides' | 'name'>;
 
+@Entity()
 export class Triangle {
+  @Column(() => Name)
   name: Name;
-  sides: Sides;
 
-  // TODO: cover Triangle with unit tests
+  @Column(() => Sides)
+  sides: Sides;
 
   constructor(
     params: CreateTriangleParams,
     extraValidationData: ExtraValidationData,
   ) {
     const canCreateTriangle = Triangle.canCreate(params, extraValidationData);
-    path('triangle', canCreateTriangle);
 
     if (isFail(canCreateTriangle)) {
       throw new Error(JSON.stringify(display(canCreateTriangle)));
@@ -45,6 +47,6 @@ export class Triangle {
     const sidesInvariant = path('sides', Sides.canCreate(sides, sidesData));
     const nameInvariant = path('name', Name.canCreate(name, nameData));
 
-    return compose(sidesInvariant, nameInvariant);
+    return path('triangle', compose(sidesInvariant, nameInvariant));
   }
 }
