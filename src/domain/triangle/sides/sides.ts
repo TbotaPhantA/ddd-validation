@@ -1,4 +1,7 @@
-import { ExtraSideValidation, Side } from '../../shared/value-objects/side';
+import {
+  ExtraSideValidation,
+  Side,
+} from '../../shared/value-objects/side/side';
 import {
   Invariant,
   compose,
