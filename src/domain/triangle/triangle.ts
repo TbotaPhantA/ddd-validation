@@ -3,9 +3,10 @@ import {
   Invariant,
   compose,
   isFail,
-  result,
+  path,
 } from '@derbent-ninjas/invariant-composer';
 import { Name } from './name/name';
+import { display } from '../shared/utils/display';
 
 export interface ExtraValidationData {
   nameData: {
@@ -26,14 +27,14 @@ export class Triangle {
     params: CreateTriangleParams,
     extraValidationData: ExtraValidationData,
   ) {
-    const canCreate = Triangle.canCreate(params, extraValidationData).path(
-      'triangle',
-    );
+    const canCreateTriangle = Triangle.canCreate(params, extraValidationData);
+    path('triangle', canCreateTriangle);
 
-    if (isFail(canCreate)) {
-      throw new Error(JSON.stringify(result(canCreate)));
+    if (isFail(canCreateTriangle)) {
+      throw new Error(JSON.stringify(display(canCreateTriangle)));
     }
 
+    this.name = params.name;
     this.sides = params.sides;
   }
 
@@ -41,8 +42,8 @@ export class Triangle {
     { name, sides }: CreateTriangleParams,
     { nameData, sidesData }: ExtraValidationData,
   ): Invariant {
-    const sidesInvariant = Sides.canCreate(sides, sidesData).path('sides');
-    const nameInvariant = Name.canCreate(name, nameData).path('name');
+    const sidesInvariant = path('sides', Sides.canCreate(sides, sidesData));
+    const nameInvariant = path('name', Name.canCreate(name, nameData));
 
     return compose(sidesInvariant, nameInvariant);
   }

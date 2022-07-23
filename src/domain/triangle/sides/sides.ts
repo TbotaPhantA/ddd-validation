@@ -3,7 +3,7 @@ import {
   Invariant,
   compose,
   isFail,
-  result,
+  result, path
 } from '@derbent-ninjas/invariant-composer';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
 
@@ -24,7 +24,10 @@ export class Sides {
     params: CreateSidesParams,
     extraValidationData: ExtraSidesValidation,
   ) {
-    const canCreate = Sides.canCreate(params, extraValidationData);
+    const canCreate = path(
+      'sides',
+      Sides.canCreate(params, extraValidationData),
+    );
 
     if (isFail(canCreate)) {
       throw new Error(JSON.stringify(result(canCreate)));
@@ -39,9 +42,9 @@ export class Sides {
     { sideA, sideB, sideC }: CreateSidesParams,
     { sideAData, sideBData, sideCData }: ExtraSidesValidation,
   ): Invariant {
-    const sideAInvariant = Side.canCreate(sideA, sideAData).path('sideA');
-    const sideBInvariant = Side.canCreate(sideB, sideBData).path('sideB');
-    const sideCInvariant = Side.canCreate(sideC, sideCData).path('sideC');
+    const sideAInvariant = path('sideA', Side.canCreate(sideA, sideAData));
+    const sideBInvariant = path('sideB', Side.canCreate(sideB, sideBData));
+    const sideCInvariant = path('sideC', Side.canCreate(sideC, sideCData));
 
     const allSidesInvariant = compose(
       everySideDoesntIncreaseLengthOfTwoOtherSides(sideA, sideB, sideC),

@@ -1,4 +1,9 @@
-import { compose, isFail, result } from '@derbent-ninjas/invariant-composer';
+import {
+  compose,
+  isFail,
+  path,
+  result,
+} from '@derbent-ninjas/invariant-composer';
 import {
   lengthIsNotIncreasingMaxValue,
   lengthIsNotNegative,
@@ -31,10 +36,13 @@ export class Side {
     { length }: CreateSideParams,
     { isUnique }: ExtraSideValidation,
   ) {
-    const lengthInvariant = compose(
-      lengthIsNotNegative(length),
-      lengthIsNotIncreasingMaxValue(length),
-    ).path('length');
+    const lengthInvariant = path(
+      'length',
+      compose(
+        lengthIsNotNegative(length),
+        lengthIsNotIncreasingMaxValue(length),
+      ),
+    );
 
     const sideInvariant = compose(sideMustBeUnique(isUnique));
 
