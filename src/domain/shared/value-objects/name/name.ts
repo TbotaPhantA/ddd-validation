@@ -4,6 +4,7 @@ import {
   nameIsUnique,
   nameLengthIsNotIncreasingMax,
 } from './name-invariants';
+import { Column } from 'typeorm';
 
 export interface ExtraNameValidation {
   isUnique: boolean;
@@ -12,6 +13,7 @@ export interface ExtraNameValidation {
 type CreateNameFields = Pick<Name, 'name'>;
 
 export class Name {
+  @Column()
   name: string;
 
   constructor(
