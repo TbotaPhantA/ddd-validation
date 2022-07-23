@@ -5,6 +5,7 @@ import {
   sideMustBeUnique,
 } from './invariants';
 import { assertCanCreate } from '../../errors/assertCanCreate';
+import { Column } from 'typeorm';
 
 export interface ExtraSideValidation {
   isUnique: boolean;
@@ -13,6 +14,7 @@ export interface ExtraSideValidation {
 type CreateSideParams = Pick<Side, 'length'>;
 
 export class Side {
+  @Column()
   readonly length: number;
 
   constructor(

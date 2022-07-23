@@ -5,6 +5,7 @@ import {
 import { Invariant, compose, path } from '@derbent-ninjas/invariant-composer';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
 import { assertCanCreate } from '../../shared/errors/assertCanCreate';
+import { Column } from 'typeorm';
 
 export interface ExtraSidesValidation {
   sideAData: ExtraSideValidation;
@@ -15,8 +16,13 @@ export interface ExtraSidesValidation {
 type CreateSidesParams = Pick<Sides, 'sideA' | 'sideB' | 'sideC'>;
 
 export class Sides {
+  @Column(() => Side)
   readonly sideA: Side;
+
+  @Column(() => Side)
   readonly sideB: Side;
+
+  @Column(() => Side)
   readonly sideC: Side;
 
   constructor(
