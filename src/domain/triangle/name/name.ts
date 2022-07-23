@@ -1,21 +1,21 @@
 import { compose, isFail, result } from '@derbent-ninjas/invariant-composer';
 import {
-  doesntContainSpecialSymbols,
+  nameDoesntContainSpecialSymbols,
   nameIsUnique,
   nameLengthIsNotIncreasingMax,
-} from './invariants';
+} from './name-invariants';
 
 export interface ExtraNameValidation {
   isUnique: boolean;
 }
 
-type CreateNameParams = Pick<Name, 'name'>;
+type CreateNameFields = Pick<Name, 'name'>;
 
 export class Name {
   name: string;
 
   constructor(
-    createNameParams: CreateNameParams,
+    createNameParams: CreateNameFields,
     extraNameValidation: ExtraNameValidation,
   ) {
     const canCreate = Name.canCreate(createNameParams, extraNameValidation);
@@ -28,13 +28,13 @@ export class Name {
   }
 
   public static canCreate(
-    { name }: CreateNameParams,
+    { name }: CreateNameFields,
     { isUnique }: ExtraNameValidation,
   ) {
     return compose(
       nameIsUnique(isUnique),
       nameLengthIsNotIncreasingMax(name),
-      doesntContainSpecialSymbols(name),
+      nameDoesntContainSpecialSymbols(name),
     );
   }
 }
