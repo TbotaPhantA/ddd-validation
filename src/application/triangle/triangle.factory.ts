@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TriangleRepository } from './triangle.repository';
 import { CreateTriangleInputDto } from './dto/create-triangle-dto/create-triangle-input.dto';
-import { Triangle } from '../../domain/triangle/triangle';
+import { ExtraValidationData, Triangle } from '../../domain/triangle/triangle';
 import { assertCanCreateTriangle } from '../shared/utils/assertCanCreateTriangle';
 import { path } from '@derbent-ninjas/invariant-composer';
 
@@ -9,8 +9,8 @@ import { path } from '@derbent-ninjas/invariant-composer';
 export class TriangleFactory {
   constructor(private readonly triangleRepository: TriangleRepository) {}
 
-  public create(dto: CreateTriangleInputDto): Triangle {
-    const extraValidationParams = this.createExtraValidationParams();
+  public async create(dto: CreateTriangleInputDto): Promise<Triangle> {
+    const extraValidationParams = await this.createExtraValidationParams();
 
     const canCreate = Triangle.canCreate(dto, extraValidationParams);
     path('triangle', canCreate);
@@ -19,12 +19,10 @@ export class TriangleFactory {
     return new Triangle(dto, extraValidationParams);
   }
 
-  private createExtraValidationParams() {
+  private async createExtraValidationParams(): Promise<ExtraValidationData> {
     // TODO: make real queries to DB
-    const isNameUnique = false;
-    const isSideAUnique = false;
-    const isSideBUnique = false;
-    const isSideCUnique = false;
+    const [isNameUnique, isSideAUnique, isSideBUnique, isSideCUnique] =
+      await Promise.all([false, false, false, false]);
 
     return {
       nameData: {

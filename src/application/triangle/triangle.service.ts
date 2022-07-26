@@ -12,7 +12,7 @@ export class TriangleService {
   ) {}
 
   public async create(dto: CreateTriangleInputDto) {
-    const triangle = this.triangleFactory.create(dto);
+    const triangle = await this.triangleFactory.create(dto);
 
     await this.triangleRepository.save(triangle);
 
