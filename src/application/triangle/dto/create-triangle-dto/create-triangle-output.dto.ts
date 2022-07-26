@@ -1,10 +1,13 @@
 import { NameDto } from './name.dto';
 import { SidesDto } from './sides.dto';
 import { Triangle } from '../../../../domain/triangle/triangle';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTriangleOutputDto {
+  @ApiProperty({ type: NameDto })
   name: NameDto;
 
+  @ApiProperty({ type: SidesDto })
   sides: SidesDto;
 
   public static from(triangle: Triangle): CreateTriangleOutputDto {

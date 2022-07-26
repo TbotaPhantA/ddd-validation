@@ -1,0 +1,18 @@
+version: '3.0'
+
+services:
+  postgres:
+    container_name: ddd_validation_postgres
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: ddd_validation
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    volumes:
+      - ddd_validation_postgres:/var/lib/postgresql/data
+
+volumes:
+  ddd_validation_postgres:
+    driver: local
