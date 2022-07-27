@@ -6,12 +6,8 @@ import {
 } from './name-invariants';
 import { Column } from 'typeorm';
 import { assertCanCreate } from '../../errors/assertCanCreate';
-
-export interface ExtraNameValidation {
-  isUnique: boolean;
-}
-
-type CreateNameFields = Pick<Name, 'name'>;
+import { CreateNameFields } from './types/createNameFields';
+import { ExtraNameValidationParams } from './types/extraNameValidationParams';
 
 export class Name {
   @Column()
@@ -19,17 +15,17 @@ export class Name {
 
   constructor(
     createNameParams: CreateNameFields,
-    extraNameValidation: ExtraNameValidation,
+    extraNameValidation: ExtraNameValidationParams,
   ) {
     const canCreate = Name.canCreate(createNameParams, extraNameValidation);
     assertCanCreate('name', canCreate);
 
-    this.name = createNameParams.name;
+    Object.assign(this, createNameParams);
   }
 
   public static canCreate(
     { name }: CreateNameFields,
-    { isUnique }: ExtraNameValidation,
+    { isUnique }: ExtraNameValidationParams,
   ) {
     return compose(
       nameIsUnique(isUnique),
