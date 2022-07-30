@@ -1,10 +1,10 @@
-import { Side } from '../../shared/value-objects/side/side';
-import { Invariant, success, fail } from '@derbent-ninjas/invariant-composer';
+import { Side } from '../../../../shared/value-objects';
+import { fail, Invariant, success } from '@derbent-ninjas/invariant-composer';
 
 export const everySideDoesntIncreaseLengthOfTwoOtherSides = (
-  sideA: Side,
-  sideB: Side,
-  sideC: Side,
+  sideA: Pick<Side, 'length'>,
+  sideB: Pick<Side, 'length'>,
+  sideC: Pick<Side, 'length'>,
 ): Invariant => {
   if (
     sideA.length < sideB.length + sideC.length &&
@@ -14,7 +14,7 @@ export const everySideDoesntIncreaseLengthOfTwoOtherSides = (
     return success();
   } else {
     return fail({
-      message: 'every side shouldnt increase length of two other sides',
+      message: "every side shouldn't increase length of two other sides",
     });
   }
 };

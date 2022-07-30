@@ -1,17 +1,11 @@
-import { compose, path } from '@derbent-ninjas/invariant-composer';
-import {
-  lengthIsNotIncreasingMaxValue,
-  lengthIsNotNegative,
-  sideMustBeUnique,
-} from './invariants';
-import { assertCanCreate } from '../../errors/assertCanCreate';
+import { assert, Guard } from '@derbent-ninjas/invariant-composer';
 import { Column } from 'typeorm';
-
-export interface ExtraSideValidation {
-  isUnique: boolean;
-}
-
-type CreateSideParams = Pick<Side, 'length'>;
+import {
+  CreateSideParams,
+  UpdateSideParams,
+  ExtraSideValidationParams,
+} from './types';
+import { canCreateSide, canUpdateSide } from './canActivates';
 
 export class Side {
   @Column()
@@ -19,28 +13,16 @@ export class Side {
 
   constructor(
     params: CreateSideParams,
-    extraValidationData: ExtraSideValidation,
+    extraValidationData: ExtraSideValidationParams,
   ) {
-    const canCreate = Side.canCreate(params, extraValidationData);
-    assertCanCreate('side', canCreate);
+    const canCreate = canCreateSide(params, extraValidationData);
+    assert('side', canCreate);
 
     this.length = params.length;
   }
 
-  public static canCreate(
-    { length }: CreateSideParams,
-    { isUnique }: ExtraSideValidation,
-  ) {
-    const canCreateLength = path(
-      'length',
-      compose(
-        lengthIsNotNegative(length),
-        lengthIsNotIncreasingMaxValue(length),
-      ),
-    );
-
-    const canCreateSide = compose(sideMustBeUnique(isUnique));
-
-    return compose(canCreateLength, canCreateSide);
+  @Guard(canUpdateSide)
+  public update(params: UpdateSideParams, _: ExtraSideValidationParams): void {
+    Object.assign(this, params);
   }
 }

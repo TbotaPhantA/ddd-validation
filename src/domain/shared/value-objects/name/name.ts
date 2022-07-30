@@ -1,13 +1,11 @@
-import { compose } from '@derbent-ninjas/invariant-composer';
-import {
-  nameDoesntContainSpecialSymbols,
-  nameIsUnique,
-  nameLengthIsNotIncreasingMax,
-} from './name-invariants';
 import { Column } from 'typeorm';
-import { assertCanCreate } from '../../errors/assertCanCreate';
-import { CreateNameFields } from './types/createNameFields';
-import { ExtraNameValidationParams } from './types/extraNameValidationParams';
+import {
+  CreateNameFields,
+  ExtraNameValidationParams,
+  UpdateNameFields,
+} from './types';
+import { canCreateName, canUpdateName } from './canActivates';
+import { assert, Guard } from '@derbent-ninjas/invariant-composer';
 
 export class Name {
   @Column()
@@ -17,20 +15,12 @@ export class Name {
     createNameParams: CreateNameFields,
     extraNameValidation: ExtraNameValidationParams,
   ) {
-    const canCreate = Name.canCreate(createNameParams, extraNameValidation);
-    assertCanCreate('name', canCreate);
-
+    assert('name', canCreateName(createNameParams, extraNameValidation));
     Object.assign(this, createNameParams);
   }
 
-  public static canCreate(
-    { name }: CreateNameFields,
-    { isUnique }: ExtraNameValidationParams,
-  ) {
-    return compose(
-      nameIsUnique(isUnique),
-      nameLengthIsNotIncreasingMax(name),
-      nameDoesntContainSpecialSymbols(name),
-    );
+  @Guard(canUpdateName)
+  public update(params: UpdateNameFields, _: ExtraNameValidationParams): void {
+    Object.assign(this, params);
   }
 }
