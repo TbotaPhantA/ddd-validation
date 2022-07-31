@@ -6,14 +6,18 @@ import {
   success,
 } from '@derbent-ninjas/invariant-composer';
 import { Name, canUpdateName } from '../shared/value-objects';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { CreateTriangleParams } from './types';
 import { ExtraTriangleValidationParams } from './types';
 import { canCreateTriangle } from './canActivates';
 import { UpdateTriangleParams } from './types';
+import { v4 as generateUUIDV4 } from 'uuid';
 
 @Entity()
 export class Triangle {
+  @PrimaryColumn()
+  readonly id: string;
+
   @Column(() => Name)
   readonly name: Name;
 
@@ -27,8 +31,8 @@ export class Triangle {
     const canCreate = canCreateTriangle(params, extraValidationData);
     assert('triangle', canCreate);
 
-    this.name = params.name;
-    this.sides = params.sides;
+    Object.assign(this, params);
+    this.id = generateUUIDV4();
   }
 
   public update(

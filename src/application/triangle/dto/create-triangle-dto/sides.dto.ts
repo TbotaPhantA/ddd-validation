@@ -3,11 +3,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class SidesDto {
   @ApiProperty({ type: SideDto })
-  sideA: SideDto;
+  readonly sideA: SideDto;
 
   @ApiProperty({ type: SideDto })
-  sideB: SideDto;
+  readonly sideB: SideDto;
 
   @ApiProperty({ type: SideDto })
-  sideC: SideDto;
+  readonly sideC: SideDto;
 }

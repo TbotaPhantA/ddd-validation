@@ -1,3 +1,3 @@
-import { Side } from '../side';
-
-export type CreateSideParams = Pick<Side, 'length'>;
+export type CreateSideParams = {
+  length: number;
+};

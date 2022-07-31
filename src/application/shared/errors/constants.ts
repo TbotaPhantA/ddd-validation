@@ -1,2 +1,3 @@
-export const CANNOT_CREATE = (entityName: string) =>
-  `CANNOT_CREATE_${entityName.toUpperCase()}`;
+export const CANNOT_CREATE_TRIANGLE = 'CANNOT_CREATE_TRIANGLE';
+export const CANNOT_UPDATE_TRIANGLE = 'CANNOT_UPDATE_TRIANGLE';
+export const TRIANGLE_NOT_FOUND = 'TRIANGLE_NOT_FOUND';

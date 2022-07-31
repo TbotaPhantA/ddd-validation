@@ -1,3 +1,3 @@
 export * from './updateNameFields';
-export * from './createNameFields';
+export * from './createNameParams';
 export * from './extraNameValidationParams';

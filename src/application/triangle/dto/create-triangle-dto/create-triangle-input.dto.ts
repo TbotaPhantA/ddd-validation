@@ -4,8 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTriangleInputDto {
   @ApiProperty({ type: NameDto })
-  name: NameDto;
+  readonly name: NameDto;
 
   @ApiProperty({ type: SidesDto })
-  sides: SidesDto;
+  readonly sides: SidesDto;
 }

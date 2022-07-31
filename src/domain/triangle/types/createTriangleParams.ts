@@ -1,3 +1,7 @@
-import { Triangle } from '../triangle';
+import { CreateNameParams } from '../../shared/value-objects';
+import { CreateSidesParams } from '../values-objects/sides';
 
-export type CreateTriangleParams = Pick<Triangle, 'sides' | 'name'>;
+export type CreateTriangleParams = {
+  name: CreateNameParams;
+  sides: CreateSidesParams;
+};

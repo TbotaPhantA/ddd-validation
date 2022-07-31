@@ -1,3 +1,7 @@
-import { Sides } from '../sides';
+import { CreateSideParams } from '../../../../shared/value-objects';
 
-export type CreateSidesParams = Pick<Sides, 'sideA' | 'sideB' | 'sideC'>;
+export type CreateSidesParams = {
+  sideA: CreateSideParams;
+  sideB: CreateSideParams;
+  sideC: CreateSideParams;
+};

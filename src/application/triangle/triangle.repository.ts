@@ -10,6 +10,10 @@ export class TriangleRepository {
     private readonly triangleTypeORMRepository: Repository<Triangle>,
   ) {}
 
+  public async findOneById(triangleId: string): Promise<Triangle> {
+    return this.triangleTypeORMRepository.findOneBy({ id: triangleId });
+  }
+
   public async save(triangle: Triangle): Promise<Triangle> {
     return this.triangleTypeORMRepository.save(triangle);
   }

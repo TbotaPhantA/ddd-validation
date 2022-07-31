@@ -1,14 +1,13 @@
 import {
   Fail,
-  FailResult,
+  FailDisplay,
   Invariant,
-  result,
-  SuccessResult,
+  SuccessDisplay,
 } from '@derbent-ninjas/invariant-composer';
 
 type ReturnType<I extends Invariant> = I extends Fail
-  ? FailResult
-  : SuccessResult;
+  ? FailDisplay
+  : SuccessDisplay;
 
 export const display = <I extends Invariant>(invariant: I): ReturnType<I> =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

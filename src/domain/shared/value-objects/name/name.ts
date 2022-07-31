@@ -1,6 +1,6 @@
 import { Column } from 'typeorm';
 import {
-  CreateNameFields,
+  CreateNameParams,
   ExtraNameValidationParams,
   UpdateNameFields,
 } from './types';
@@ -9,10 +9,10 @@ import { assert, Guard } from '@derbent-ninjas/invariant-composer';
 
 export class Name {
   @Column()
-  name: string;
+  readonly name: string;
 
   constructor(
-    createNameParams: CreateNameFields,
+    createNameParams: CreateNameParams,
     extraNameValidation: ExtraNameValidationParams,
   ) {
     assert('name', canCreateName(createNameParams, extraNameValidation));
