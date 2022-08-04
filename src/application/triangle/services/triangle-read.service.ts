@@ -2,7 +2,10 @@ import { Triangle } from '../../../domain/triangle/triangle';
 import { TriangleRepository } from '../triangle.repository';
 import { ApplicationException } from '../../shared/errors/application-exception';
 import { TRIANGLE_NOT_FOUND } from '../../shared/errors/constants';
-import { ExtraTriangleValidationParams } from '../../../domain/triangle/types';
+import {
+  CreateTriangleParams,
+  ExtraTriangleValidationParams,
+} from '../../../domain/triangle/types';
 import { HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -22,20 +25,40 @@ export class TriangleReadService {
     return triangle;
   }
 
-  public async getExtraValidationParams(): Promise<ExtraTriangleValidationParams> {
+  // TODO: make extra validation params for UPDATE Triangle. Cause properties there are optional.
+  public async getExtraCreateTriangleValidationParams(
+    dto: CreateTriangleParams,
+  ): Promise<ExtraTriangleValidationParams> {
+    const [
+      triangleWithSameName,
+      triangleWithSameSideA,
+      triangleWithSameSideB,
+      triangleWithSameSideC,
+    ] = await Promise.all([
+      this.triangleRepository.findOneByName(dto.name.name),
+      this.triangleRepository.findOneBySideALength(dto.sides.sideA.length),
+      this.triangleRepository.findOneBySideALength(dto.sides.sideB.length),
+      this.triangleRepository.findOneBySideALength(dto.sides.sideC.length),
+    ]);
+
+    const isNameUnique = !triangleWithSameName;
+    const isSideAUnique = !triangleWithSameSideA;
+    const isSideBUnique = !triangleWithSameSideB;
+    const isSideCUnique = !triangleWithSameSideC;
+
     return {
       nameData: {
-        isUnique: false,
+        isUnique: isNameUnique,
       },
       sidesData: {
         sideAData: {
-          isUnique: false,
+          isUnique: isSideAUnique,
         },
         sideBData: {
-          isUnique: false,
+          isUnique: isSideBUnique,
         },
         sideCData: {
-          isUnique: false,
+          isUnique: isSideCUnique,
         },
       },
     };

@@ -11,7 +11,9 @@ export class TriangleFactory {
 
   public async create(dto: CreateTriangleInputDto): Promise<Triangle> {
     const extraValidationParams =
-      await this.triangleReadService.getExtraValidationParams();
+      await this.triangleReadService.getExtraCreateTriangleValidationParams(
+        dto,
+      );
 
     const canCreate = canCreateTriangle(dto, extraValidationParams);
     assertCanCreateTriangle(canCreate);
