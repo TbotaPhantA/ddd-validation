@@ -18,7 +18,7 @@ export class TriangleReadService {
   ) {}
 
   public async getOneById(triangleId: string): Promise<Triangle> {
-    const triangle = this.triangleRepository.findOneById(triangleId);
+    const triangle = await this.triangleRepository.findOneById(triangleId);
 
     if (!triangle) {
       throw new ApplicationException(
