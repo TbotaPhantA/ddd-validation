@@ -28,30 +28,16 @@ export class Sides {
   ): Invariant {
     const { sideA, sideB, sideC } = params[0];
     const { sideAValidation, sideBValidation, sideCValidation } = params[1];
-
-    const canCreateSideA = path(
-      'sideA',
-      Side.canCreate(sideA, sideAValidation),
-    );
-    const canCreateSideB = path(
-      'sideB',
-      Side.canCreate(sideB, sideBValidation),
-    );
-    const canCreateSideC = path(
-      'sideC',
-      Side.canCreate(sideC, sideCValidation),
+    const sideAInv = path('sideA', Side.canCreate(sideA, sideAValidation));
+    const sideBInv = path('sideB', Side.canCreate(sideB, sideBValidation));
+    const sideCInv = path('sideC', Side.canCreate(sideC, sideCValidation));
+    const canCreateAllSides = everySideDoesntIncreaseLengthOfTwoOtherSides(
+      sideA,
+      sideB,
+      sideC,
     );
 
-    const canCreateAllSides = compose(
-      everySideDoesntIncreaseLengthOfTwoOtherSides(sideA, sideB, sideC),
-    );
-
-    return compose(
-      canCreateSideA,
-      canCreateSideB,
-      canCreateSideC,
-      canCreateAllSides,
-    );
+    return compose(sideAInv, sideBInv, sideCInv, canCreateAllSides);
   }
 
   public update(
@@ -59,7 +45,6 @@ export class Sides {
     validation: DeepPartial<ExtraSidesValidationParams>,
   ): void {
     assert('sides', this.canUpdate(props, validation));
-
     this.sideA.update(props.sideA, validation.sideAValidation);
     this.sideB.update(props.sideB, validation.sideBValidation);
     this.sideC.update(props.sideC, validation.sideCValidation);
