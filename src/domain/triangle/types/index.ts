@@ -1,3 +1,2 @@
-export * from './createTriangleParams';
-export * from './updateTriangleParams';
+export * from './createTriangleProps';
 export * from './extraTriangleValidationParams';

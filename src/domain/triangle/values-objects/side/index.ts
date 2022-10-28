@@ -1,3 +1,3 @@
-export * from './sides';
+export * from './side';
 export * from './types';
 export * from './invariants';

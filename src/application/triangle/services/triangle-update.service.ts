@@ -1,12 +1,14 @@
 import { UpdateTriangleInputDto } from '../dto/update-triangle-dto/update-triangle-input.dto';
 import { UpdateTriangleOutputDto } from '../dto/update-triangle-dto/update-triangle-output.dto';
-import { TriangleRepository } from '../triangle.repository';
 import { TriangleReadService } from './triangle-read.service';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { TriangleRepository } from '../repositories/triangleRepository';
+import { TRIANGLE_REPOSITORY_TOKEN } from '../tokens';
 
 @Injectable()
 export class TriangleUpdateService {
   constructor(
+    @Inject(TRIANGLE_REPOSITORY_TOKEN)
     private readonly triangleRepository: TriangleRepository,
     private readonly triangleReadService: TriangleReadService,
   ) {}
@@ -17,10 +19,10 @@ export class TriangleUpdateService {
   ): Promise<UpdateTriangleOutputDto> {
     const triangle = await this.triangleReadService.getOneById(triangleId);
 
-    const validationParams =
-      await this.triangleReadService.getExtraValidationParams();
+    const validation =
+      await this.triangleReadService.getExtraUpdateTriangleValidation(dto);
 
-    triangle.update(dto, validationParams);
+    triangle.update(dto, validation);
 
     await this.triangleRepository.save(triangle);
 
