@@ -1,4 +1,3 @@
-import { Column } from 'typeorm';
 import { CreateNameProps, ExtraCreateNameValidationParams } from './types';
 import { assert, compose, success } from '@derbent-ninjas/invariant-composer';
 import {
@@ -9,7 +8,6 @@ import {
 import { DeepPartial } from '../../../shared/types/deepPartial';
 
 export class Name {
-  @Column()
   readonly name: string;
 
   constructor(

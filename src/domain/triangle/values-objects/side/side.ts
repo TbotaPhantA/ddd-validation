@@ -6,7 +6,6 @@ import {
   path,
   success,
 } from '@derbent-ninjas/invariant-composer';
-import { Column } from 'typeorm';
 import { CreateSideProps, ExtraSideValidationParams } from './types';
 import {
   lengthIsNotIncreasingMaxValue,
@@ -16,7 +15,6 @@ import {
 import { DeepPartial } from '../../../shared/types/deepPartial';
 
 export class Side {
-  @Column()
   readonly length: number;
 
   constructor(

@@ -1,8 +1,8 @@
 import { ExtraSidesValidationParams } from '../values-objects/sides';
 
 export interface ExtraTriangleValidationParams {
-  nameData: {
+  nameValidation: {
     isUnique: boolean;
   };
-  sidesData: ExtraSidesValidationParams;
+  sidesValidation: ExtraSidesValidationParams;
 }

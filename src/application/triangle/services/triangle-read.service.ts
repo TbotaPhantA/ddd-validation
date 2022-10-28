@@ -51,17 +51,17 @@ export class TriangleReadService {
     const isSideCUnique = !triangleWithSameSideC;
 
     return {
-      nameData: {
+      nameValidation: {
         isUnique: isNameUnique,
       },
-      sidesData: {
-        sideAData: {
+      sidesValidation: {
+        sideAValidation: {
           isUnique: isSideAUnique,
         },
-        sideBData: {
+        sideBValidation: {
           isUnique: isSideBUnique,
         },
-        sideCData: {
+        sideCValidation: {
           isUnique: isSideCUnique,
         },
       },
@@ -89,17 +89,17 @@ export class TriangleReadService {
     const isSideCUnique = !triangleWithSameSideC;
 
     return {
-      nameData: {
+      nameValidation: {
         isUnique: isNameUnique,
       },
-      sidesData: {
-        sideAData: {
+      sidesValidation: {
+        sideAValidation: {
           isUnique: isSideAUnique,
         },
-        sideBData: {
+        sideBValidation: {
           isUnique: isSideBUnique,
         },
-        sideCData: {
+        sideCValidation: {
           isUnique: isSideCUnique,
         },
       },
