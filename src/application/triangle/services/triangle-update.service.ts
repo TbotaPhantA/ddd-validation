@@ -4,6 +4,7 @@ import { TriangleReadService } from './triangle-read.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { TriangleRepository } from '../repositories/triangleRepository';
 import { TRIANGLE_REPOSITORY_TOKEN } from '../tokens';
+import { assertCanUpdateTriangle } from 'src/application/shared/utils/assertCanUpdateTriangle';
 
 @Injectable()
 export class TriangleUpdateService {
@@ -22,10 +23,10 @@ export class TriangleUpdateService {
     const validation =
       await this.triangleReadService.getExtraUpdateTriangleValidation(dto);
 
+    assertCanUpdateTriangle(triangle.canUpdate(dto, validation));
     triangle.update(dto, validation);
 
     await this.triangleRepository.save(triangle);
-
     return UpdateTriangleOutputDto.from(triangle);
   }
 }
