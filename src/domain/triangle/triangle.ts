@@ -1,15 +1,18 @@
-import { Sides } from './values-objects/sides';
+import { ExtraSidesValidation, Sides } from './values-objects/sides';
 import {
   assert,
   compose,
   Invariant,
   path,
 } from '@derbent-ninjas/invariant-composer';
-import { CreateTriangleProps } from './types';
-import { ExtraTriangleValidationParams } from './types';
 import { v4 as generateUUIDV4 } from 'uuid';
-import { DeepPartial } from '../shared/types/deepPartial';
-import { Name } from './values-objects/name';
+import { ExtraNameValidation, Name } from './values-objects/name';
+import { CreateTriangleInputDto } from '../../application/triangle/dto/create-triangle-dto/create-triangle-input.dto';
+
+export interface ExtraTriangleValidation {
+  nameValidation: ExtraNameValidation;
+  sidesValidation: ExtraSidesValidation;
+}
 
 export class Triangle {
   readonly id: string;
@@ -18,16 +21,16 @@ export class Triangle {
   // TODO: cover with tests
 
   constructor(
-    props: CreateTriangleProps,
-    validation: ExtraTriangleValidationParams,
+    dto: CreateTriangleInputDto,
+    validation: ExtraTriangleValidation,
   ) {
-    assert('triangle', Triangle.canCreate(props, validation));
+    assert('triangle', Triangle.canCreate(dto, validation));
     this.id = generateUUIDV4();
-    this.name = new Name(props.name, validation.nameValidation);
-    this.sides = new Sides(props.sides, validation.sidesValidation);
+    this.name = new Name(dto.name, validation.nameValidation);
+    this.sides = new Sides(dto.sides, validation.sidesValidation);
   }
 
-  public static canCreate(
+  static canCreate(
     ...params: ConstructorParameters<typeof Triangle>
   ): Invariant {
     const { sides, name } = params[0];
@@ -41,20 +44,16 @@ export class Triangle {
     return compose(canCreateSides, canCreateName);
   }
 
-  public update(
-    props: DeepPartial<CreateTriangleProps>,
-    validation: DeepPartial<ExtraTriangleValidationParams>,
+  update(
+    dto: CreateTriangleInputDto,
+    validation: ExtraTriangleValidation,
   ): void {
-    assert('triangle', this.canUpdate(props, validation));
-    this.name.update(props.name, validation.nameValidation);
-    this.sides.update(props.sides, validation.sidesValidation);
+    assert('triangle', this.canUpdate(dto, validation));
+    this.name.update(dto.name, validation.nameValidation);
+    this.sides.update(dto.sides, validation.sidesValidation);
   }
 
-  public canUpdate(...args: Parameters<Triangle['update']>): Invariant {
-    const { name, sides } = args[0];
-    const { nameValidation, sidesValidation } = args[1];
-    const canUpdateName = Name.canUpdate(name, nameValidation);
-    const canUpdateSides = this.sides.canUpdate(sides, sidesValidation);
-    return compose(canUpdateName, canUpdateSides);
+  canUpdate(...args: Parameters<Triangle['update']>): Invariant {
+    return Triangle.canCreate(...args);
   }
 }

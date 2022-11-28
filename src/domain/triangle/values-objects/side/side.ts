@@ -1,35 +1,31 @@
 import {
   assert,
   compose,
-  ifExists,
   Invariant,
   path,
-  success,
 } from '@derbent-ninjas/invariant-composer';
-import { CreateSideProps, ExtraSideValidationParams } from './types';
 import {
   lengthIsNotIncreasingMaxValue,
   lengthIsNotNegative,
   sideMustBeUnique,
 } from './invariants';
-import { DeepPartial } from '../../../shared/types/deepPartial';
+import { SideDto } from '../../../../application/triangle/dto/create-triangle-dto/side.dto';
+
+export interface ExtraSideValidation {
+  isSideLengthUnique: boolean;
+}
 
 export class Side {
   readonly length: number;
 
-  constructor(
-    props: CreateSideProps,
-    extraValidationData: ExtraSideValidationParams,
-  ) {
-    assert('side', Side.canCreate(props, extraValidationData));
-    this.length = props.length;
+  constructor(dto: SideDto, validation: ExtraSideValidation) {
+    assert('side', Side.canCreate(dto, validation));
+    this.length = dto.length;
   }
 
-  public static canCreate(
-    ...params: ConstructorParameters<typeof Side>
-  ): Invariant {
-    const { length } = params[0];
-    const { isUnique } = params[1];
+  static canCreate(...params: ConstructorParameters<typeof Side>): Invariant {
+    const [{ length }, { isSideLengthUnique }] = params;
+
     const canCreateLength = path(
       'length',
       compose(
@@ -38,33 +34,16 @@ export class Side {
       ),
     );
 
-    const canCreateSide = compose(sideMustBeUnique(isUnique));
+    const canCreateSide = compose(sideMustBeUnique(isSideLengthUnique));
     return compose(canCreateLength, canCreateSide);
   }
 
-  public update(
-    props: DeepPartial<CreateSideProps>,
-    extraValidationData: DeepPartial<ExtraSideValidationParams>,
-  ): void {
-    assert('side', Side.canUpdate(props, extraValidationData));
-    Object.assign(this, props);
+  update(dto: SideDto, validation: ExtraSideValidation): void {
+    assert('side', Side.canUpdate(dto, validation));
+    Object.assign(this, dto);
   }
 
-  public static canUpdate(
-    ...[props, validation]: Parameters<Side['update']>
-  ): Invariant {
-    const length = props.length;
-    const isUnique = validation.isUnique;
-
-    const canUpdateLength = path(
-      'length',
-      compose(
-        ifExists(length, lengthIsNotNegative),
-        ifExists(length, lengthIsNotIncreasingMaxValue),
-      ),
-    );
-
-    const canUpdateSide = length ? sideMustBeUnique(isUnique) : success();
-    return compose(canUpdateLength, canUpdateSide);
+  static canUpdate(...params: Parameters<Side['update']>): Invariant {
+    return this.canCreate(...params);
   }
 }

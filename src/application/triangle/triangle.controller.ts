@@ -54,7 +54,7 @@ export class TriangleController {
     return this.triangleCreateService.create(dto);
   }
 
-  @Put('/:triangleId')
+  @Put(':triangleId')
   @ApiOperation({ summary: 'Update Triangle' })
   @ApiResponse({
     status: HttpStatus.OK,

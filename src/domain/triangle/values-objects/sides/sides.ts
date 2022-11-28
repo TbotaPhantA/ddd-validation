@@ -4,11 +4,15 @@ import {
   Invariant,
   path,
 } from '@derbent-ninjas/invariant-composer';
-import { CreateSidesProps } from './types';
-import { ExtraSidesValidationParams } from './types';
 import { everySideDoesntIncreaseLengthOfTwoOtherSides } from './invariants';
-import { DeepPartial } from '../../../shared/types/deepPartial';
-import { Side } from '../side';
+import { ExtraSideValidation, Side } from '../side';
+import { SidesDto } from '../../../../application/triangle/dto/create-triangle-dto/sides.dto';
+
+export interface ExtraSidesValidation {
+  sideAValidation: ExtraSideValidation;
+  sideBValidation: ExtraSideValidation;
+  sideCValidation: ExtraSideValidation;
+}
 
 export class Sides {
   readonly sideA: Side;
@@ -16,21 +20,23 @@ export class Sides {
   readonly sideC: Side;
   // TODO: cover with tests
 
-  constructor(props: CreateSidesProps, validation: ExtraSidesValidationParams) {
-    assert('sides', Sides.canCreate(props, validation));
-    this.sideA = new Side(props.sideA, validation.sideAValidation);
-    this.sideB = new Side(props.sideB, validation.sideBValidation);
-    this.sideC = new Side(props.sideC, validation.sideCValidation);
+  constructor(dto: SidesDto, validation: ExtraSidesValidation) {
+    assert('sides', Sides.canCreate(dto, validation));
+    this.sideA = new Side(dto.sideA, validation.sideAValidation);
+    this.sideB = new Side(dto.sideB, validation.sideBValidation);
+    this.sideC = new Side(dto.sideC, validation.sideCValidation);
   }
 
-  public static canCreate(
-    ...params: ConstructorParameters<typeof Sides>
-  ): Invariant {
-    const { sideA, sideB, sideC } = params[0];
-    const { sideAValidation, sideBValidation, sideCValidation } = params[1];
+  static canCreate(...params: ConstructorParameters<typeof Sides>): Invariant {
+    const [
+      { sideA, sideB, sideC },
+      { sideAValidation, sideBValidation, sideCValidation },
+    ] = params;
+
     const sideAInv = path('sideA', Side.canCreate(sideA, sideAValidation));
     const sideBInv = path('sideB', Side.canCreate(sideB, sideBValidation));
     const sideCInv = path('sideC', Side.canCreate(sideC, sideCValidation));
+
     const canCreateAllSides = everySideDoesntIncreaseLengthOfTwoOtherSides(
       sideA,
       sideB,
@@ -40,47 +46,14 @@ export class Sides {
     return compose(sideAInv, sideBInv, sideCInv, canCreateAllSides);
   }
 
-  public update(
-    props: DeepPartial<CreateSidesProps>,
-    validation: DeepPartial<ExtraSidesValidationParams>,
-  ): void {
-    assert('sides', this.canUpdate(props, validation));
-    this.sideA.update(props.sideA, validation.sideAValidation);
-    this.sideB.update(props.sideB, validation.sideBValidation);
-    this.sideC.update(props.sideC, validation.sideCValidation);
+  update(dto: SidesDto, validation: ExtraSidesValidation): void {
+    assert('sides', this.canUpdate(dto, validation));
+    this.sideA.update(dto.sideA, validation.sideAValidation);
+    this.sideB.update(dto.sideB, validation.sideBValidation);
+    this.sideC.update(dto.sideC, validation.sideCValidation);
   }
 
-  public canUpdate(...args: Parameters<Sides['update']>): Invariant {
-    const { sideA, sideB, sideC } = args[0];
-    const { sideAValidation, sideBValidation, sideCValidation } = args[1];
-
-    const canUpdateSideA = path(
-      'sideA',
-      Side.canUpdate(sideA, sideAValidation),
-    );
-    const canUpdateSideB = path(
-      'sideB',
-      Side.canUpdate(sideB, sideBValidation),
-    );
-    const canUpdateSideC = path(
-      'sideC',
-      Side.canUpdate(sideC, sideCValidation),
-    );
-
-    const newSideA = { ...this.sideA, ...sideA };
-    const newSideB = { ...this.sideB, ...sideB };
-    const newSideC = { ...this.sideC, ...sideC };
-    const canUpdateSides = everySideDoesntIncreaseLengthOfTwoOtherSides(
-      newSideA,
-      newSideB,
-      newSideC,
-    );
-
-    return compose(
-      canUpdateSideA,
-      canUpdateSideB,
-      canUpdateSideC,
-      canUpdateSides,
-    );
+  canUpdate(...args: Parameters<Sides['update']>): Invariant {
+    return Sides.canCreate(...args);
   }
 }

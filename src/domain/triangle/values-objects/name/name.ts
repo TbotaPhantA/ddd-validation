@@ -1,50 +1,39 @@
-import { CreateNameProps, ExtraCreateNameValidationParams } from './types';
-import { assert, compose, success } from '@derbent-ninjas/invariant-composer';
+import { assert, compose } from '@derbent-ninjas/invariant-composer';
 import {
   nameDoesntContainSpecialSymbols,
   nameIsUnique,
   nameLengthIsNotIncreasingMax,
 } from './name-invariants';
-import { DeepPartial } from '../../../shared/types/deepPartial';
+import { NameDto } from '../../../../application/triangle/dto/create-triangle-dto/name.dto';
+
+export interface ExtraNameValidation {
+  isNameUnique: boolean;
+}
 
 export class Name {
-  readonly name: string;
+  name: string;
 
-  constructor(
-    props: CreateNameProps,
-    extraInvariantsData: ExtraCreateNameValidationParams,
-  ) {
-    assert('name', Name.canCreate(props, extraInvariantsData));
-    this.name = props.name;
+  constructor(dto: NameDto, validation: ExtraNameValidation) {
+    assert('name', Name.canCreate(dto, validation));
+    this.name = dto.name;
   }
 
-  public static canCreate(...params: ConstructorParameters<typeof Name>) {
-    const { name } = params[0];
-    const { isUnique } = params[1];
+  static canCreate(...params: ConstructorParameters<typeof Name>) {
+    const [{ name }, { isNameUnique }] = params;
 
     return compose(
-      nameIsUnique(isUnique),
+      nameIsUnique(isNameUnique),
       nameLengthIsNotIncreasingMax(name),
       nameDoesntContainSpecialSymbols(name),
     );
   }
 
-  public update(
-    props: DeepPartial<CreateNameProps>,
-    validation: DeepPartial<ExtraCreateNameValidationParams>,
-  ): void {
-    assert('name', Name.canUpdate(props, validation));
-    Object.assign(this, props);
+  update(dto: NameDto, validation: ExtraNameValidation): void {
+    assert('name', Name.canUpdate(dto, validation));
+    this.name = dto.name;
   }
 
-  public static canUpdate(...params: Parameters<Name['update']>) {
-    const { name } = params[0];
-    const { isUnique } = params[1];
-
-    return compose(
-      name ? nameIsUnique(isUnique) : success(),
-      name ? nameLengthIsNotIncreasingMax(name) : success(),
-      name ? nameDoesntContainSpecialSymbols(name) : success(),
-    );
+  static canUpdate(...params: Parameters<Name['update']>) {
+    return Name.canCreate(...params);
   }
 }

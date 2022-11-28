@@ -1,14 +1,13 @@
-import { Triangle } from '../../../domain/triangle/triangle';
+import {
+  ExtraTriangleValidation,
+  Triangle,
+} from '../../../domain/triangle/triangle';
 import { ApplicationException } from '../../shared/errors/application-exception';
 import { TRIANGLE_NOT_FOUND } from '../../shared/errors/constants';
-import {
-  CreateTriangleProps,
-  ExtraTriangleValidationParams,
-} from '../../../domain/triangle/types';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { DeepPartial } from '../../../domain/shared/types/deepPartial';
 import { TriangleRepository } from '../repositories/triangleRepository';
 import { TRIANGLE_REPOSITORY_TOKEN } from '../tokens';
+import { CreateTriangleInputDto } from '../dto/create-triangle-dto/create-triangle-input.dto';
 
 @Injectable()
 export class TriangleReadService {
@@ -31,8 +30,8 @@ export class TriangleReadService {
   }
 
   public async getExtraCreateTriangleValidationParams(
-    dto: CreateTriangleProps,
-  ): Promise<ExtraTriangleValidationParams> {
+    dto: CreateTriangleInputDto,
+  ): Promise<ExtraTriangleValidation> {
     const [
       triangleWithSameName,
       triangleWithSameSideA,
@@ -52,57 +51,25 @@ export class TriangleReadService {
 
     return {
       nameValidation: {
-        isUnique: isNameUnique,
+        isNameUnique: isNameUnique,
       },
       sidesValidation: {
         sideAValidation: {
-          isUnique: isSideAUnique,
+          isSideLengthUnique: isSideAUnique,
         },
         sideBValidation: {
-          isUnique: isSideBUnique,
+          isSideLengthUnique: isSideBUnique,
         },
         sideCValidation: {
-          isUnique: isSideCUnique,
+          isSideLengthUnique: isSideCUnique,
         },
       },
     };
   }
 
   public async getExtraUpdateTriangleValidation(
-    dto: DeepPartial<CreateTriangleProps>,
-  ): Promise<ExtraTriangleValidationParams> {
-    const [
-      triangleWithSameName,
-      triangleWithSameSideA,
-      triangleWithSameSideB,
-      triangleWithSameSideC,
-    ] = await Promise.all([
-      this.triangleRepository.findOneByName(dto.name.name),
-      this.triangleRepository.findOneBySideALength(dto.sides.sideA.length),
-      this.triangleRepository.findOneBySideBLength(dto.sides.sideB.length),
-      this.triangleRepository.findOneBySideCLength(dto.sides.sideC.length),
-    ]);
-
-    const isNameUnique = !triangleWithSameName;
-    const isSideAUnique = !triangleWithSameSideA;
-    const isSideBUnique = !triangleWithSameSideB;
-    const isSideCUnique = !triangleWithSameSideC;
-
-    return {
-      nameValidation: {
-        isUnique: isNameUnique,
-      },
-      sidesValidation: {
-        sideAValidation: {
-          isUnique: isSideAUnique,
-        },
-        sideBValidation: {
-          isUnique: isSideBUnique,
-        },
-        sideCValidation: {
-          isUnique: isSideCUnique,
-        },
-      },
-    };
+    dto: CreateTriangleInputDto,
+  ): Promise<ExtraTriangleValidation> {
+    return this.getExtraCreateTriangleValidationParams(dto);
   }
 }
