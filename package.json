@@ -1,8 +1,8 @@
 {
   "name": "ddd-validation",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Exmaple of validation which doesn't violate Domain-Driven Design principles",
+  "author": "TbotaPhantA",
   "private": false,
   "license": "UNLICENSED",
   "scripts": {

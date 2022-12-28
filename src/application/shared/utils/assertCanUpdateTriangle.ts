@@ -20,4 +20,4 @@ export const assertCanUpdateTriangle = (canUpdate: Invariant): void => {
       },
     );
   }
-}
+};
